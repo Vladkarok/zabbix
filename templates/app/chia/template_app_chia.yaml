@@ -1,0 +1,136 @@
+zabbix_export:
+  version: '6.2'
+  date: '2022-11-16T20:27:29Z'
+  template_groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates/Applications
+  templates:
+    -
+      uuid: 2be01b17788c462c9d560bf3135b0637
+      template: 'Windows Chia log monitoring'
+      name: 'Windows Chia log monitoring'
+      description: |
+        Template to extract and collect data related to Chia harvester values in Windows enviroment. It includes:
+        - Number of plots eligible for farming
+        - Number of found proofs
+        - Time which took to find the proof
+        - Total plots on harvester
+        https://github.com/Vladkarok/zabbix
+      groups:
+        -
+          name: Templates/Applications
+      items:
+        -
+          uuid: 52b194c92c1246e4a40de50d7c56c53a
+          name: 'Plots eligible for farming'
+          type: ZABBIX_ACTIVE
+          key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\1,,]'
+          delay: 1s
+          description: 'Number of plots were eligible for farming'
+          tags:
+            -
+              tag: Application
+              value: Chia
+        -
+          uuid: 6d136368a15545f6a83631715d462319
+          name: 'Proofs found'
+          type: ZABBIX_ACTIVE
+          key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\2,,]'
+          delay: 1s
+          description: 'Number of found proofs.'
+          tags:
+            -
+              tag: Application
+              value: Chia
+        -
+          uuid: 0f3b20e1089f497088bf2879aa3c5689
+          name: 'Proof time'
+          type: ZABBIX_ACTIVE
+          key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\3,,]'
+          delay: 1s
+          value_type: FLOAT
+          units: s
+          description: 'Time which takes to find the proof.'
+          tags:
+            -
+              tag: Application
+              value: Chia
+          triggers:
+            -
+              uuid: 4244852d7de2472ebe0575443985d87c
+              expression: 'last(/Windows Chia log monitoring/log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\3,,],#2)>12s'
+              name: 'Proof searching time too long'
+              priority: AVERAGE
+              description: 'Proof searching time too long. Consider some investigation.'
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: Application
+                  value: Chia
+        -
+          uuid: 893bb8745c6845f38bde82c997c89ecb
+          name: 'Total plots'
+          type: ZABBIX_ACTIVE
+          key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\4,,]'
+          delay: 1s
+          description: 'Total number of plots'
+          tags:
+            -
+              tag: Application
+              value: Chia
+      tags:
+        -
+          tag: Application
+          value: Chia
+      macros:
+        -
+          macro: '{$SEARCH_REGEX}'
+          value: '(\d+) plots were eligible for farming .+\.\.\. Found (\d+) proofs\. Time: (\d+\.\d+) s\. Total (\d+) plots$'
+          description: 'Regular expression to extract needed lines from log'
+        -
+          macro: '{$USERNAME}'
+          value: CHANGE_ME
+          description: 'Username of the user where Chia is installed'
+  graphs:
+    -
+      uuid: bc1e16be696b4a3b8e85f3b2747d84aa
+      name: 'Plots eligible for farming'
+      graph_items:
+        -
+          color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'Windows Chia log monitoring'
+            key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\1,,]'
+    -
+      uuid: e88d5dab844842cc8907ac99a1d4293e
+      name: 'Proofs found'
+      graph_items:
+        -
+          color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'Windows Chia log monitoring'
+            key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\2,,]'
+    -
+      uuid: 02e09a49eee54a62a7eee24ea46e15d2
+      name: 'Time for calculation'
+      graph_items:
+        -
+          color: AB47BC
+          calc_fnc: ALL
+          item:
+            host: 'Windows Chia log monitoring'
+            key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\3,,]'
+    -
+      uuid: 1c12a8a6805b4485b93c907257d0bc3a
+      name: 'Total plots'
+      graph_items:
+        -
+          drawtype: FILLED_REGION
+          color: FFFF00
+          calc_fnc: ALL
+          item:
+            host: 'Windows Chia log monitoring'
+            key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\4,,]'
