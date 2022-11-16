@@ -3,15 +3,15 @@
 ## Overview  
 
 Tested on Zabbix version: **6.2**, Chia version **1.6.1**.  
-This template extracts data from Chia log file using Zabbix agent (active mode. Also it has built in graphs on each item (but I recommend to use dashboards for visualization) and trigger when the *time to find the proof* is long.
+This template extracts data from the Chia log file using the Zabbix Agent (active mode). Also, it has built-in graphs on each item (but I recommend using dashboards for visualization) and trigger when the *time to find the proof* is long.
 
 ## Setup
 
-Log file monitoring requires Zabbix Agent in **active** mode, so it need to be installed with configuration which will allow active checks:
+Log file monitoring requires Zabbix Agent in **active** mode, so it needs to be installed with a configuration that will allow active checks:
 - the same **hostname** in Zabbix Agent configuration and related Host in Zabbix frontend on your server;
-- the **IP address/domain name** of your *Zabbix server active* directive in *Zabbix agent configuration*  
-Obviously you should be able to connect **from** monitored host **to** Zabbix server and open 10051 port on Zabbix server to receive connections from Zabbix Agent.  
-Packages for Zabbix agent can be found here https://www.zabbix.com/download_agents 
+- the **IP address/domain name** of your *Zabbix server active* directive in *Zabbix Agent configuration*  
+You should be able to connect **from** monitored host **to** Zabbix server and open the 10051 port on the Zabbix server to receive connections from Zabbix Agent.  
+Packages for Zabbix Agents can be found here https://www.zabbix.com/download_agents 
 <br><br>
 ### In Windows
 
@@ -21,11 +21,11 @@ Enable *INFO* **log_level** in your Chia config file (C:\Users\YOUR_USERNAME\\.c
     log_level: WARNING
 ```
 
-and restart Chia processes.
+and restart the Chia processes.
 
 ### In Zabbix server
 
-Import template (Configuration - Templates - Import).
+Import the template from this repository to your Zabbix Server (Configuration - Templates - Import).
 <br><br>
 
 ### Macros used
