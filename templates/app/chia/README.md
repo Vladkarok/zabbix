@@ -11,6 +11,7 @@ Log file monitoring requires Zabbix Agent in **active** mode, so it needs to be 
 - the same **hostname** in Zabbix Agent configuration and related Host in Zabbix frontend on your server;
 - the **IP address/domain name** of your *Zabbix server active* directive in *Zabbix Agent configuration*  
 You should be able to connect **from** monitored host **to** Zabbix server and open the 10051 port on the Zabbix server to receive connections from Zabbix Agent.  
+
 Packages for Zabbix Agents can be found here https://www.zabbix.com/download_agents 
 <br><br>
 ### In Windows
