@@ -27,7 +27,7 @@ zabbix_export:
           name: 'Plots eligible for farming'
           type: ZABBIX_ACTIVE
           key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\1,,]'
-          delay: 1s
+          delay: 9s
           description: 'Number of plots were eligible for farming'
           tags:
             -
@@ -38,7 +38,7 @@ zabbix_export:
           name: 'Proofs found'
           type: ZABBIX_ACTIVE
           key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\2,,]'
-          delay: 1s
+          delay: 9s
           description: 'Number of found proofs.'
           tags:
             -
@@ -49,7 +49,7 @@ zabbix_export:
           name: 'Proof time'
           type: ZABBIX_ACTIVE
           key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\3,,]'
-          delay: 1s
+          delay: 9s
           value_type: FLOAT
           units: s
           description: 'Time which takes to find the proof.'
@@ -74,7 +74,7 @@ zabbix_export:
           name: 'Total plots'
           type: ZABBIX_ACTIVE
           key: 'log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\4,,]'
-          delay: 1s
+          delay: 9s
           description: 'Total number of plots'
           tags:
             -
