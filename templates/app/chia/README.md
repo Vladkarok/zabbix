@@ -21,6 +21,10 @@ Enable *INFO* **log_level** in your Chia config file (C:\Users\YOUR_USERNAME\\.c
 ```yml
     log_level: WARNING
 ```
+to
+```yml
+    log_level: INFO
+```
 
 and restart the Chia processes.
 
