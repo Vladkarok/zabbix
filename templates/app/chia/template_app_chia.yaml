@@ -60,7 +60,7 @@ zabbix_export:
           triggers:
             -
               uuid: 4244852d7de2472ebe0575443985d87c
-              expression: 'last(/Windows Chia log monitoring/log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\3,,],#2)>12s'
+              expression: 'last(/Windows Chia log monitoring/log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\3,,],#2)>5s'
               name: 'Proof searching time too long'
               priority: AVERAGE
               description: 'Proof searching time too long. Consider some investigation.'

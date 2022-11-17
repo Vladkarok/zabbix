@@ -57,7 +57,7 @@ Import the template from this repository to your Zabbix Server (Configuration - 
 
 |Name|Description|Expression|Severity|Additional info|
 |----|-----------|----|----|----|
-|Proof searching time too long |<p>Proof searching time too long. Consider some investigation.</p> |`last(/Windows Chia log monitoring/log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\3,,],#2)>12s` |AVERAGE |<p>Manual close: YES</p> |
+|Proof searching time too long |<p>Proof searching time too long. Consider some investigation.</p> |`last(/Windows Chia log monitoring/log[C:\Users\{$USERNAME}\.chia\mainnet\log\debug.log,"{$SEARCH_REGEX}",,,skip,\3,,],#2)>5s` |AVERAGE |<p>Manual close: YES</p> |
 
 ## Used materials
 
