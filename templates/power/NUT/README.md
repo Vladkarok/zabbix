@@ -9,6 +9,10 @@ This is the modified version we use with our equipment. Feel free to disable/del
 
 Zabbix version: 6.2 and higher.
 
+## Configuration
+
+> Zabbix should be configured according to the instructions in the [Templates out of the box](https://www.zabbix.com/documentation/current/en/manual/config/templates_out_of_the_box) section
+
 
 ## Setup
 
@@ -44,13 +48,13 @@ systemctl restart zabbix-agent
 |`{$UPS.TEMPERATURE.CRIT}`|UPS critical temperature (may vary of specific UPS models)|`35`|
 
 
-### LLD rule UPS Discovery
+### LLD rule **UPS Discovery**
 
 |Name|Description|Type|Key and additional info|
 |----|-----------|----|-----------------------|
 |UPS Discovery|Basic UPS discovery rule|Zabbix agent|upsmon[ups.discovery]|
 
-### Item prototypes for UPS Discovery
+### Item prototypes for **UPS Discovery**
 
 |Name|Description|Type|Key and additional info|
 |----|-----------|----|-----------------------|
@@ -65,7 +69,7 @@ systemctl restart zabbix-agent
 
 ---
 
-### Trigger prototypes for UPS Discovery
+### Trigger prototypes for **UPS Discovery**
 
 |Name|Description|Expression|Severity|Dependencies and additional info|
 |----|-----------|----------|--------|--------------------------------|
