@@ -1,0 +1,220 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 57b7ae836ca64446ba2c296389c009b7
+      name: Templates/Modules
+  templates:
+    - uuid: fade2219c7b2455cb5b021a91f41113b
+      template: 'Linux CPU per core by Zabbix agent'
+      name: 'Linux CPU per core by Zabbix agent'
+      groups:
+        - name: Templates/Modules
+      discovery_rules:
+        - uuid: 9ad7f29799484a6986795e9d01246121
+          name: 'CPU Core Discovery'
+          key: system.cpu.discovery
+          delay: 1d
+          description: 'Discovers separate cores of CPU'
+          item_prototypes:
+            - uuid: a651dc7e7012423fa9b6d7ea52e14fbb
+              name: 'CPU guest time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},guest]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'Guest  time (time  spent  running  a  virtual  CPU  for  a  guest  operating  system).'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: 5109fe5a70ce49f89276e1dbd1431f83
+              name: 'CPU guest nice time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},guest_nice]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'Time spent running a niced guest (virtual CPU for guest operating systems under the control of the Linux kernel).'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: ecf1677a84a74f199a8a3fe5de203ed0
+              name: 'CPU idle time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},idle]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'The time the CPU has spent doing nothing.'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: 425791ef560e411d97eda34fa67fd4fe
+              name: 'CPU interrupt time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},interrupt]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'The amount of time the CPU has been servicing hardware interrupts.'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: 6033dc63f3c24edf973cdc9839e2f523
+              name: 'CPU iowait time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},iowait]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'Amount of time the CPU has been waiting for I/O to complete.'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: 6cce673d0c6b427f846712f1596ed153
+              name: 'CPU nice time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},nice]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'The time the CPU has spent running users'' processes that have been niced.'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: 5f6d0a8e25bc462999c39787763c7ddf
+              name: 'CPU softirq time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},softirq]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'The amount of time the CPU has been servicing software interrupts.'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: a8a389715b0245d6b91fa9b69f912eff
+              name: 'CPU steal time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},steal]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'The amount of CPU ''stolen'' from this virtual machine by the hypervisor for other tasks (such as running another virtual machine).'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: b61849b4e9ac4886a76844bf882b2030
+              name: 'CPU system time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},system]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'The time the CPU has spent running the kernel and its processes.'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: fc004098e1a24ca8b4672ebb57af1bc1
+              name: 'CPU user time by Core {#CPU.NUMBER}'
+              key: 'system.cpu.util[{#CPU.NUMBER},user]'
+              delay: 15s
+              value_type: FLOAT
+              units: '%'
+              description: 'The time the CPU has spent running users'' processes that are not niced.'
+              tags:
+                - tag: component
+                  value: cpu
+            - uuid: d96c3298347b47e9a6e96a0b08372e00
+              name: 'CPU utilization by Core {#CPU.NUMBER}'
+              type: DEPENDENT
+              key: 'system.cpu.util[{#CPU.NUMBER}]'
+              delay: '0'
+              history: 7d
+              value_type: FLOAT
+              units: '%'
+              description: 'CPU utilization by core in %.'
+              preprocessing:
+                - type: JAVASCRIPT
+                  parameters:
+                    - |
+                      //Calculate utilization
+                      return (100 - value)
+              master_item:
+                key: 'system.cpu.util[{#CPU.NUMBER},idle]'
+              tags:
+                - tag: component
+                  value: cpu
+              trigger_prototypes:
+                - uuid: 6bf9a0a290944e41b345b83b285d88a8
+                  expression: 'min(/Linux CPU per core by Zabbix agent/system.cpu.util[{#CPU.NUMBER}],5m)>{$CPU_CORE.UTIL.CRIT}'
+                  name: 'High utilization on Core {#CPU.NUMBER}'
+                  opdata: 'Current utilization: {ITEM.LASTVALUE1}'
+                  priority: WARNING
+                  description: 'CPU Core utilization is too high.'
+                  manual_close: 'YES'
+                  tags:
+                    - tag: scope
+                      value: performance
+          graph_prototypes:
+            - uuid: 2bbf69cc5cb94f2694729a58715eb536
+              name: 'CPU times per Core {#CPU.NUMBER}'
+              ymax_type_1: FIXED
+              graph_items:
+                - color: 1A7C11
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},system]'
+                - sortorder: '1'
+                  color: 2774A4
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},user]'
+                - sortorder: '2'
+                  color: F63100
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},nice]'
+                - sortorder: '3'
+                  color: A54F10
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},iowait]'
+                - sortorder: '4'
+                  color: FC6EA3
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},steal]'
+                - sortorder: '5'
+                  color: 6C59DC
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},interrupt]'
+                - sortorder: '6'
+                  color: AC8C14
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},softirq]'
+                - sortorder: '7'
+                  color: 611F27
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},guest]'
+                - sortorder: '8'
+                  color: F230E0
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER},guest_nice]'
+            - uuid: 2bbab64f46004b91aa8d5bbc746efb0e
+              name: 'CPU utilization per Core {#CPU.NUMBER}'
+              ymax_type_1: FIXED
+              graph_items:
+                - color: 43A047
+                  calc_fnc: ALL
+                  item:
+                    host: 'Linux CPU per core by Zabbix agent'
+                    key: 'system.cpu.util[{#CPU.NUMBER}]'
+      macros:
+        - macro: '{$CPU_CORE.UTIL.CRIT}'
+          value: '95'
+          description: 'Critical CPU Core utilization for trigger'
