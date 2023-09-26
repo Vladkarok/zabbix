@@ -69,27 +69,27 @@ systemctl restart zabbix-agent
 
 |Name|Description|Expression|Severity|Dependencies and additional info|
 |----|-----------|----------|--------|--------------------------------|
-|UPS {#UPSNAME} Charge < 10%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<10|DISASTER|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Charge < 20%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<20|DISASTER|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Charge < 30%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<30|DISASTER|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Charge < 40%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<40|DISASTER|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Charge < 50%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<50|HIGH|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Charge < 60%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<60|HIGH|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Charge < 70%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<70|HIGH|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Charge < 80%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<80|HIGH|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Charge < 90%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<90|HIGH|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
-|UPS {#UPSNAME} Status - Unknown state|Unknown state|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=0|DISASTER| |
-|UPS {#UPSNAME} Status - On battery|On battery (mains is absent)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=2|HIGH| |
-|UPS {#UPSNAME} Status - Low battery|Low battery|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=3|DISASTER| |
-|UPS {#UPSNAME} Status -The battery needs to be replaced|The battery needs to be replaced|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=4|HIGH| |
-|UPS {#UPSNAME} Status - Battery is charging|The battery is charging|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=5|INFO| |
+|UPS {#UPSNAME} Charge < 10%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<10|Disaster|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Charge < 20%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<20|Disaster|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Charge < 30%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<30|Disaster|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Charge < 40%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<40|Disaster|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Charge < 50%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<50|High|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Charge < 60%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<60|High|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Charge < 70%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<70|High|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Charge < 80%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<80|High|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Charge < 90%| |avg(/UPS-NUT/upsmon[{#UPSNAME},battery.charge],2m)<90|High|**Depends on:**<br>UPS-NUT: UPS {#UPSNAME} Status - Offline|
+|UPS {#UPSNAME} Status - Unknown state|Unknown state|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=0|Disaster| |
+|UPS {#UPSNAME} Status - On battery|On battery (mains is absent)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=2|High| |
+|UPS {#UPSNAME} Status - Low battery|Low battery|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=3|Disaster| |
+|UPS {#UPSNAME} Status -The battery needs to be replaced|The battery needs to be replaced|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=4|High| |
+|UPS {#UPSNAME} Status - Battery is charging|The battery is charging|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=5|Info| |
 |UPS {#UPSNAME} Status - battery is discharging (inverter is providing load power)|The battery is discharging (inverter is providing load power)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=6|WARNING| |
-|UPS {#UPSNAME} Status - Bypass|UPS bypass circuit is active echo no battery protection is available|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=7|DISASTER| |
-|UPS {#UPSNAME} Status - Calibration|UPS is currently performing runtime calibration (on battery)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=8|INFO| |
-|UPS {#UPSNAME} Status - Offline|UPS is offline and is not supplying power to the load|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=9|DISASTER| |
-|UPS {#UPSNAME} Status - Overloaded|UPS is overloaded|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=10|DISASTER| |
-|UPS {#UPSNAME} Status - Trimming incoming voltage|UPS is trimming incoming voltage (called "buck" in some hardware)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=11|HIGH| |
-|UPS {#UPSNAME} Status - Boosting incoming voltage|UPS is boosting incoming voltage|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=12|HIGH| |
-|UPS {#UPSNAME} Status - FORCE SHUTDOWN|UPS sending FORCE SHUTDOWN|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=13|DISASTER| |
-|UPS {#UPSNAME} Status - Online with Bypass|UPS bypass circuit is active echo no battery protection is available in Online state|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=14|HIGH| |
-| UPS {#UPSNAME} Temperature|UPS temperature over threshold|last(/UPS-NUT/upsmon[{#UPSNAME},ups.temperature])>{$UPS.TEMPERATURE.CRIT}|HIGH| |
+|UPS {#UPSNAME} Status - Bypass|UPS bypass circuit is active echo no battery protection is available|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=7|Disaster| |
+|UPS {#UPSNAME} Status - Calibration|UPS is currently performing runtime calibration (on battery)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=8|Info| |
+|UPS {#UPSNAME} Status - Offline|UPS is offline and is not supplying power to the load|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=9|Disaster| |
+|UPS {#UPSNAME} Status - Overloaded|UPS is overloaded|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=10|Disaster| |
+|UPS {#UPSNAME} Status - Trimming incoming voltage|UPS is trimming incoming voltage (called "buck" in some hardware)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=11|High| |
+|UPS {#UPSNAME} Status - Boosting incoming voltage|UPS is boosting incoming voltage|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=12|High| |
+|UPS {#UPSNAME} Status - FORCE SHUTDOWN|UPS sending FORCE SHUTDOWN|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=13|Disaster| |
+|UPS {#UPSNAME} Status - Online with Bypass|UPS bypass circuit is active echo no battery protection is available in Online state|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=14|High| |
+| UPS {#UPSNAME} Temperature|UPS temperature over threshold|last(/UPS-NUT/upsmon[{#UPSNAME},ups.temperature])>{$UPS.TEMPERATURE.CRIT}|High| |
