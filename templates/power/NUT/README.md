@@ -83,7 +83,7 @@ systemctl restart zabbix-agent
 |UPS {#UPSNAME} Status - Low battery|Low battery|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=3|Disaster| |
 |UPS {#UPSNAME} Status -The battery needs to be replaced|The battery needs to be replaced|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=4|High| |
 |UPS {#UPSNAME} Status - Battery is charging|The battery is charging|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=5|Info| |
-|UPS {#UPSNAME} Status - battery is discharging (inverter is providing load power)|The battery is discharging (inverter is providing load power)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=6|WARNING| |
+|UPS {#UPSNAME} Status - battery is discharging (inverter is providing load power)|The battery is discharging (inverter is providing load power)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=6|Warning| |
 |UPS {#UPSNAME} Status - Bypass|UPS bypass circuit is active echo no battery protection is available|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=7|Disaster| |
 |UPS {#UPSNAME} Status - Calibration|UPS is currently performing runtime calibration (on battery)|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=8|Info| |
 |UPS {#UPSNAME} Status - Offline|UPS is offline and is not supplying power to the load|last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=9|Disaster| |
