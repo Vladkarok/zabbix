@@ -10,8 +10,9 @@ Zabbix version: 6.2 and higher.
 
 ## Configuration
 
-> Zabbix should be configured according to the instructions in the [Templates out of the box](https://www.zabbix.com/documentation/current/en/manual/config/templates_out_of_the_box) section
+> Zabbix should be configured according to the instructions in the [Templates out of the box](https://www.zabbix.com/documentation/current/en/manual/config/templates_out_of_the_box) section.  
 
+Download and import these templates to your zabbix server.
 ## Setup
 
 Zabbix agent required. No additional configuration.
