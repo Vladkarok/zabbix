@@ -1,0 +1,476 @@
+zabbix_export:
+  version: '6.2'
+  date: '2022-12-26T19:36:22Z'
+  template_groups:
+    -
+      uuid: e960332b3f6c46a1956486d4f3f99fce
+      name: 'Templates/Server hardware'
+  templates:
+    -
+      uuid: 3d4d7dfd085841418cde5b93acbed37b
+      template: 'Sensors IPMI discovery by script'
+      name: 'Sensors IPMI discovery by script'
+      groups:
+        -
+          name: 'Templates/Server hardware'
+      items:
+        -
+          uuid: 94427c8c7d374bd0baec368de5c500ad
+          name: 'iLO ping'
+          type: SIMPLE
+          key: 'icmpping[{$ILO},10,,,]'
+          tags:
+            -
+              tag: component
+              value: health
+            -
+              tag: component
+              value: network
+          triggers:
+            -
+              uuid: bd4dedb5277645698a07407fdc7b9df5
+              expression: 'max(/Sensors IPMI discovery by script/icmpping[{$ILO},10,,,],180)=0'
+              name: '{HOST.NAME} iLO is unavailable by ICMP'
+              priority: WARNING
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: availability
+        -
+          uuid: 90a5660150d84bb2bea0bec6a47e777f
+          name: 'iLO Firmware Version'
+          type: EXTERNAL
+          key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''Firmware Revision'',bmc,{$ILO}]'
+          delay: 3600s
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SOFTWARE
+          tags:
+            -
+              tag: component
+              value: firmware
+            -
+              tag: component
+              value: inventory
+            -
+              tag: component
+              value: system
+          triggers:
+            -
+              uuid: 972c8f15dda04c078c7cbe4da638abc4
+              expression: 'change(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''Firmware Revision'',bmc,{$ILO}])>0 and length(last(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''Firmware Revision'',bmc,{$ILO}]))<>0 and length(last(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''Firmware Revision'',bmc,{$ILO}],#2))<>0'
+              name: 'iLO Firmware was changed'
+              priority: INFO
+              manual_close: 'YES'
+              tags:
+                -
+                  tag: scope
+                  value: info
+        -
+          uuid: 67987063d349460e8e7928bf1d31a983
+          name: 'Server Model Name'
+          type: EXTERNAL
+          key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''FRU Board Product Name'',fru,{$ILO}]'
+          delay: 3600s
+          trends: '0'
+          value_type: TEXT
+          inventory_link: HARDWARE
+          tags:
+            -
+              tag: component
+              value: inventory
+            -
+              tag: component
+              value: system
+        -
+          uuid: c1dda92cc37c4e4c87c84cfe028f5010
+          name: 'Board Serial Number'
+          type: EXTERNAL
+          key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''FRU Board Serial Number'',fru,{$ILO}]'
+          delay: 3600s
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SERIALNO_A
+          tags:
+            -
+              tag: component
+              value: inventory
+            -
+              tag: component
+              value: system
+        -
+          uuid: 94903e5472564431aa9c29434001d456
+          name: 'Chassis Serial Number'
+          type: EXTERNAL
+          key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''FRU Chassis Serial Number'',fru,{$ILO}]'
+          delay: 1h
+          trends: '0'
+          value_type: TEXT
+          inventory_link: SERIALNO_B
+          tags:
+            -
+              tag: component
+              value: inventory
+            -
+              tag: component
+              value: system
+        -
+          uuid: d61dbc59a54d45a59e82927e9bbbb621
+          name: 'Chassis Type'
+          type: EXTERNAL
+          key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''FRU Chassis Type'',fru,{$ILO}]'
+          delay: 3600s
+          trends: '0'
+          value_type: TEXT
+          inventory_link: TYPE
+          tags:
+            -
+              tag: component
+              value: inventory
+            -
+              tag: component
+              value: system
+      discovery_rules:
+        -
+          uuid: 5cacaea647e54bc29f503983bcd64267
+          name: 'Discovery iLO Chassis Power State'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},chassis,"system power"]'
+          delay: 3610s
+          item_prototypes:
+            -
+              uuid: c8b4e93e9d68452187749f9166830d13
+              name: '{#KEY} State'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',chassis,{$ILO}]'
+              delay: 300s
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Power Info'
+              trigger_prototypes:
+                -
+                  uuid: 78cb43fdfe0f4c93a7260a550fcfe5df
+                  expression: 'find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',chassis,{$ILO}],,,"on")=0 and length(last(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',chassis,{$ILO}]))>1'
+                  name: 'Server not powered on'
+                  priority: HIGH
+                  manual_close: 'YES'
+        -
+          uuid: 9ec5949269034a3aaa9211f84180edf8
+          name: 'Discovery iLO Chassis fault flags'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},chassis,fault,discrete]'
+          delay: 3600s
+          item_prototypes:
+            -
+              uuid: dad1a4d1b3854967a73887fa034acfb5
+              name: '{#KEY} flag'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',chassis,''{$ILO}'']'
+              delay: 300s
+              trends: '0'
+              value_type: TEXT
+              description: 'Discovery iLO Chassis fault flags'
+              tags:
+                -
+                  tag: component
+                  value: system
+              trigger_prototypes:
+                -
+                  uuid: f7944f221a6e46d992d8490291f57771
+                  expression: 'find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',chassis,''{$ILO}''],,,"true")=1'
+                  name: '{#KEY}'
+                  priority: WARNING
+                  manual_close: 'YES'
+        -
+          uuid: c62946830b2242b8aff218a717f6e339
+          name: 'Discovery iLO Drives'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},sensor,"disk",discrete]'
+          delay: 3620s
+          item_prototypes:
+            -
+              uuid: ac550296bb444e609c46851944febad4
+              name: '{#KEY} Status'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,''{$ILO}'',discrete]'
+              delay: 600s
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Drivers'
+              trigger_prototypes:
+                -
+                  uuid: f5ce672f0c2c4189a2cefedb0579d1be
+                  expression: 'find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,''{$ILO}'',discrete],,,"fault")=1'
+                  name: '{#KEY} fault detected'
+                  priority: HIGH
+                  manual_close: 'YES'
+                -
+                  uuid: 2d5bdc1fe4ce4e07b869980f7bf23640
+                  expression: 'change(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,''{$ILO}'',discrete])=0 and length(last(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,''{$ILO}'',discrete]))>2'
+                  name: '{#KEY} status changed'
+                  priority: WARNING
+                  manual_close: 'YES'
+        -
+          uuid: d824b4c7b854422b8714360146f02d3c
+          name: 'Discovery iLO Fans'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},sensor,"fan",numeric]'
+          delay: 3630s
+          item_prototypes:
+            -
+              uuid: c8d1f7c1f1b442cf87274633de9b17ed
+              name: '{#KEY} State'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,''{$ILO}'',discrete]'
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Fans'
+              trigger_prototypes:
+                -
+                  uuid: 9c53cbbb71b64308b942d523aaca41b2
+                  expression: 'find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,''{$ILO}'',discrete],,,"Non-redundant")=1 or find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,''{$ILO}'',discrete],,,"Lost")=1'
+                  name: 'Fans not redundant'
+                  priority: AVERAGE
+                  manual_close: 'YES'
+            -
+              uuid: 42990efd81584fa186f8b9f9d4ef2206
+              name: '{#KEY} Value'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,''{$ILO}'',{#TYPE}]'
+              value_type: FLOAT
+              units: '%'
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Fans'
+          graph_prototypes:
+            -
+              uuid: 080797119b0b489fbb0ac056a5c5593e
+              name: '{#KEY} speed'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'Sensors IPMI discovery by script'
+                    key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,''{$ILO}'',{#TYPE}]'
+        -
+          uuid: a48394f3ef2c41fa80671650ac7294e1
+          name: 'Discovery iLO Memory State'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},sensor,"memory",discrete]'
+          delay: 3690s
+          item_prototypes:
+            -
+              uuid: dcba8b18b1b14652b5f9c986ca31c57e
+              name: '{#KEY} State'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,"{$ILO}",discrete]'
+              delay: 300s
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Memory Info'
+              trigger_prototypes:
+                -
+                  uuid: 2b4be2b237d34ccf9495b3e89138b9cb
+                  expression: '(find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,"{$ILO}",discrete],,,"error")=1 and find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,"{$ILO}",discrete],,,"Correctable")=0) or find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,"{$ILO}",discrete],,,"fault")=1 or find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,"{$ILO}",discrete],,,"fail")=1'
+                  name: '{#KEY} Memory error'
+                  priority: WARNING
+                  manual_close: 'YES'
+        -
+          uuid: 44277841f7634809ba88055dd17033af
+          name: 'Discovery iLO Power Meter'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},sensor,"power meter",numeric]'
+          delay: 3640s
+          item_prototypes:
+            -
+              uuid: 371aef372bc3483181494000dc216680
+              name: 'System {#KEY}'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,{$ILO},numeric]'
+              value_type: FLOAT
+              units: W
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Power Info'
+          graph_prototypes:
+            -
+              uuid: bb8193e1249f47fba7eba494d8954aad
+              name: 'Overall {#KEY}'
+              ymin_type_1: FIXED
+              graph_items:
+                -
+                  color: EF5350
+                  calc_fnc: ALL
+                  item:
+                    host: 'Sensors IPMI discovery by script'
+                    key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,{$ILO},numeric]'
+        -
+          uuid: ad46abb2a0844a9b960a29211f1660e2
+          name: 'Discovery iLO Power Supplies State'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},sensor,"power suppl",discrete]'
+          delay: 3660s
+          item_prototypes:
+            -
+              uuid: ebff81c9c49240de8d0b05dd935a00aa
+              name: '{#KEY} Status'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,{$ILO},discrete]'
+              delay: 300s
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Power Info'
+              trigger_prototypes:
+                -
+                  uuid: c0db3199d5d941bfb66cb5ceb61693db
+                  expression: 'find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,{$ILO},discrete],,,"Non-redundant")=1 or find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,{$ILO},discrete],,,"Lost")=1'
+                  name: 'Power not redundant'
+                  priority: HIGH
+                  manual_close: 'YES'
+                -
+                  uuid: ad2cdc26a20c46e78ed4c8f635724ef0
+                  expression: 'find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,{$ILO},discrete],,,"Fail")=1'
+                  name: '{#KEY} Failure'
+                  priority: HIGH
+                  manual_close: 'YES'
+        -
+          uuid: 09daac013d3b4d9ca35e13965c04fa63
+          name: 'Discovery iLO Power Supplies Load'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},sensor,"power supply",numeric]'
+          delay: 3650s
+          item_prototypes:
+            -
+              uuid: 14c81a634ff3435784807040dabe99de
+              name: '{#KEY} Load'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,{$ILO},numeric]'
+              value_type: FLOAT
+              units: W
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Power Info'
+          graph_prototypes:
+            -
+              uuid: 02354455985d4e5983fefcb68f2f7ce2
+              name: '{#KEY} Load'
+              ymin_type_1: FIXED
+              graph_items:
+                -
+                  color: 8E24AA
+                  calc_fnc: ALL
+                  item:
+                    host: 'Sensors IPMI discovery by script'
+                    key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}",sensor,{$ILO},numeric]'
+        -
+          uuid: be0fc3b3c0894abfa31a2adb0e670a4c
+          name: 'Discovery iLO Temperatures'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},sensor,temp,numeric]'
+          delay: 3670s
+          item_prototypes:
+            -
+              uuid: 4e6e4042ab1e4e0d9431ccee98a0cff9
+              name: '{#KEY} Value'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,''{$ILO}'',numeric]'
+              value_type: FLOAT
+              units: C
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Temperature Sensors'
+            -
+              uuid: 55c42c0545034c3682f92d1f7bd1a33b
+              name: '{#KEY} State'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,{$ILO},discrete]'
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Temperature Sensors'
+              trigger_prototypes:
+                -
+                  uuid: 9145dcf3495b4530be8d1f933734ac94
+                  expression: 'find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,{$ILO},discrete],,,"OK")=0 and find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,{$ILO},discrete],,,"N/A")=0 and length(last(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,{$ILO},discrete]))<>0'
+                  name: 'Hardware {#KEY} too high'
+                  priority: WARNING
+                  manual_close: 'YES'
+          graph_prototypes:
+            -
+              uuid: 54b5c376adee46ee9a57b1f92e29d418
+              name: '{#KEY}'
+              ymin_type_1: FIXED
+              ymax_type_1: FIXED
+              graph_items:
+                -
+                  color: FF7043
+                  calc_fnc: ALL
+                  item:
+                    host: 'Sensors IPMI discovery by script'
+                    key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},''{#KEY}'',sensor,''{$ILO}'',numeric]'
+        -
+          uuid: d50f9974d8c044e8b7d50d52cc9c7e04
+          name: 'Discovery iLO VRM State'
+          type: EXTERNAL
+          key: 'ilo_discovery.pl[{$IPMI.USER},{$IPMI.PASSWORD},{$ILO},sensor,VRM,discrete]'
+          delay: 3680s
+          item_prototypes:
+            -
+              uuid: 785b8fee38454cc3a1e22f1762e0d83c
+              name: '{#KEY} Status'
+              type: EXTERNAL
+              key: 'ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}","sensor",{$ILO},discrete]'
+              delay: 300s
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: application
+                  value: 'iLO Power Info'
+              trigger_prototypes:
+                -
+                  uuid: 0f7a457f2b5349878bb510f0edb07b6b
+                  expression: 'find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}","sensor",{$ILO},discrete],,,"fault")=1 or find(/Sensors IPMI discovery by script/ipmi_proliant.pl[{$IPMI.USER},{$IPMI.PASSWORD},"{#KEY}","sensor",{$ILO},discrete],,,"fail")=1'
+                  name: '{#KEY} problem'
+                  priority: WARNING
+                  manual_close: 'YES'
+      tags:
+        -
+          tag: class
+          value: hardware
+        -
+          tag: target
+          value: server
+      macros:
+        -
+          macro: '{$ILO}'
+          description: 'Address of iLO'
+        -
+          macro: '{$IPMI.PASSWORD}'
+          type: SECRET_TEXT
+          description: 'IPMI password'
+        -
+          macro: '{$IPMI.USER}'
+          description: 'IPMI user'
