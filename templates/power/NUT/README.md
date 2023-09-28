@@ -37,7 +37,31 @@ systemctl restart zabbix-agent
 
 - Import the template NUT-UPS-{\$version}.yaml where {\$version} is your zabbix server version.
 - Make sure the template has properly configured value mapping or adjust it according your hardware (feel free to modify `ups_status.sh` aswell)<br>
-![value-mapping](value-mapping-example.png) <br>
+
+**Value mapping**
+
+Name: UPS Battery Status
+Mappings:<br>
+|Type|Value|Mapped to|
+|----|-----|---------|
+|equals|0|Unknown state|
+|equals|1|On line (mains is present)|
+|equals|2|On battery (mains is absent)|
+|equals|3|Low battery|
+|equals|4|The battery needs to be replaced|
+|equals|5|The battery is charging|
+|equals|6|The battery is discharging (inverter is providing load power)|
+|equals|7|UPS bypass circuit is active echo no battery protection is avail|
+|equals|8|UPS is currently performing runtime calibration (on battery)|
+|equals|9|UPS is offline and is not supplying power to the load|
+|equals|10|UPS is overloaded|
+|equals|11|UPS is trimming incoming voltage (called "buck" in some hardware|
+|equals|12|UPS is boosting incoming voltage|
+|equals|13|UPS sendind "FORCE SHUTDOWN", all systems have to POWEROFF|
+|equals|14|UPS in ECO mode|
+
+<br>
+
 - Attach it to needed host which needs to be monitored
 
 ### Macros used

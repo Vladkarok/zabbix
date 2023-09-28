@@ -155,7 +155,7 @@ zabbix_export:
                 TRIM             11        UPS is trimming incoming voltage (called "buck" in some hardware)
                 BOOST         12        UPS is boosting incoming voltage
                 FSD OB LB   13        UPS sending "FORCE SHUTDOWN", all secondary systems have to POWEROFF
-                OL BYPASS  14        UPS on line but bypass turned on
+                OL BYPASS  14        UPS in ECO mode
                 *                      0         Unknown state
               valuemap:
                 name: 'UPS Battery Status'
@@ -188,6 +188,11 @@ zabbix_export:
                   name: 'UPS {#UPSNAME} Status - Calibration'
                   priority: INFO
                   description: 'UPS is currently performing runtime calibration (on battery)'
+                - uuid: cc080f045ac8401f871bcd51ca2c8e92
+                  expression: 'last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=14'
+                  name: 'UPS {#UPSNAME} Status - ECO'
+                  priority: AVERAGE
+                  description: 'UPS ECO mode active'
                 - uuid: 7955c436af434cb1807ca74e08260c6c
                   expression: 'last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=13'
                   name: 'UPS {#UPSNAME} Status - FORCE SHUTDOWN'
@@ -207,12 +212,7 @@ zabbix_export:
                   expression: 'last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=2'
                   name: 'UPS {#UPSNAME} Status - On battery'
                   priority: HIGH
-                  description: 'On battery (mains is not present)'
-                - uuid: cc080f045ac8401f871bcd51ca2c8e92
-                  expression: 'last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=14'
-                  name: 'UPS {#UPSNAME} Status - Online with Bypass'
-                  priority: HIGH
-                  description: 'UPS bypass circuit is active echo no battery protection is available in Online state'
+                  description: 'On battery (mains is absent)'
                 - uuid: bc6707e00297449b824bf57bbfc85b02
                   expression: 'last(/UPS-NUT/upsmon[{#UPSNAME},ups.status])=10'
                   name: 'UPS {#UPSNAME} Status - Overloaded'
@@ -310,7 +310,7 @@ zabbix_export:
             - value: '1'
               newvalue: 'On line (mains is present)'
             - value: '2'
-              newvalue: 'On battery (mains is not present)'
+              newvalue: 'On battery (mains is absent)'
             - value: '3'
               newvalue: 'Low battery'
             - value: '4'
@@ -332,4 +332,6 @@ zabbix_export:
             - value: '12'
               newvalue: 'UPS is boosting incoming voltage'
             - value: '13'
-              newvalue: 'USP sendind "FORCE SHUTDOWN", all systems have to POWEROFF'
+              newvalue: 'UPS sendind "FORCE SHUTDOWN", all systems have to POWEROFF'
+            - value: '14'
+              newvalue: 'UPS in ECO mode'
